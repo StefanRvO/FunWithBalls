@@ -10,6 +10,8 @@ extern bool Collision;
 extern bool ShowSettings;
 extern bool Eviscosity;
 extern float viscosity;
+extern bool Espawn;
+extern float spawnrate;
 
 
 

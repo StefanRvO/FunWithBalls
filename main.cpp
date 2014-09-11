@@ -10,8 +10,11 @@
 #include <cmath>
 #include "globals.h"
 
+
 void DrawSettings();
 void HandleEvent(ALLEGRO_EVENT &ev);
+void SpawnBall(std::vector<Ball> &Balls);
+
 int main(int argc, char **argv){
 
 
@@ -72,9 +75,17 @@ int main(int argc, char **argv){
 
 
     //Main loop
+    float spawnprogress=0;
     while(true) {
-        std::cout << Balls[0].placement.x << std::endl;
-        std::cout << Balls[0].direction.x << std::endl;
+        if (Espawn)
+        {
+            spawnprogress+=spawnrate;
+            while(spawnprogress>1)
+            {
+                spawnprogress-=1.;
+                SpawnBall(Balls);
+            }
+        }
         while (!al_is_event_queue_empty(event_queue)) {
             al_get_next_event(event_queue,&ev);
             HandleEvent(ev);
@@ -136,6 +147,13 @@ void DrawSettings() {
     al_draw_line(SIZEX*0.19,SIZEY*0.15,SIZEX*0.08,SIZEY*0.15,al_map_rgb(0,0,255),2);
     float ViscContX=(viscosity+5)/10.*0.11+0.08; //Incomplete/correct
     al_draw_filled_circle(SIZEX*ViscContX,SIZEY*0.15,SIZEX*0.005,al_map_rgb(0,0,255));
+    //Spawning
+    al_draw_line(SIZEX*0.2,SIZEY*0.165,0,SIZEY*0.165,al_map_rgb(0,0,255),2);
+    if (Espawn) al_draw_textf(font, al_map_rgb(0,0,255), 0, SIZEY*0.165,ALLEGRO_ALIGN_LEFT, "Spawnrate: %.3f",spawnrate*10);
+    else al_draw_textf(font, al_map_rgb(50,50,50), 0, SIZEY*0.165,ALLEGRO_ALIGN_LEFT, "Spawnrate: %.3f",spawnrate*10);
+    al_draw_line(SIZEX*0.19,SIZEY*0.18,SIZEX*0.09,SIZEY*0.18,al_map_rgb(0,0,255),2);
+    float spawnContX=(spawnrate)/0.5*0.09+0.09; //Incomplete/correct
+    al_draw_filled_circle(SIZEX*spawnContX,SIZEY*0.18,SIZEX*0.005,al_map_rgb(0,0,255));
 
     al_destroy_font(font);
 
@@ -158,7 +176,7 @@ void HandleEvent(ALLEGRO_EVENT &event) {
             else if (event.mouse.x>SIZEX*0.05  and event.mouse.x<SIZEX*0.06 and event.mouse.y>SIZEY*0.11 and event.mouse.y<SIZEY*0.125) Collision=!Collision;
             else if (event.mouse.x>SIZEX*0.0  and event.mouse.x<SIZEX*0.07 and event.mouse.y>SIZEY*0.04 and event.mouse.y<SIZEY*0.06) Egravity=!Egravity;
             else if (event.mouse.x>SIZEX*0.0  and event.mouse.x<SIZEX*0.08 and event.mouse.y>SIZEY*0.14 and event.mouse.y<SIZEY*0.16) Eviscosity=!Eviscosity;
-
+            else if (event.mouse.x>SIZEX*0.0  and event.mouse.x<SIZEX*0.09 and event.mouse.y>SIZEY*0.17 and event.mouse.y<SIZEY*0.19) Espawn=!Espawn;
         }
         return;
     }
@@ -186,5 +204,34 @@ void HandleEvent(ALLEGRO_EVENT &event) {
             relx-=5;
             viscosity=relx;
         }
+        else if (state.x>SIZEX*0.09  and state.x<SIZEX*0.19 and state.y>SIZEY*0.17 and state.y<SIZEY*0.19)
+        {
+            Espawn=true;
+            float relx= (float)state.x/SIZEX;
+            relx-=0.09;
+            relx*=0.5;
+            relx/=0.09;
+            spawnrate=relx;
+        }
+    }
+}
+
+void SpawnBall(std::vector<Ball> &Balls)
+{
+    for (int i=0;i<1;i++) {
+        float radius=(rand()%10000/1000.+3.)/1.;
+        float placementx=rand()%SIZEX;
+        float placementy=rand()%SIZEY;
+        Ball tmpball(placementx,placementy,radius);
+        bool overlap=false;
+        for(int j=0;j<Balls.size();j++) {
+            if (sqrt((tmpball.placement.x-Balls[j].placement.x)*(tmpball.placement.x-Balls[j].placement.x)+(tmpball.placement.y-Balls[j].placement.y)*(tmpball.placement.y-Balls[j].placement.y))<=(tmpball.radius+Balls[j].radius)) {
+                overlap=true;
+                break;
+            }
+        }
+        if (overlap) { i--; continue;}
+        tmpball.setId(Balls[Balls.size()-1].getId()+1);
+        Balls.push_back(tmpball);
     }
 }
