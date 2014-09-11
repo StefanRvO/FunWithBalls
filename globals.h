@@ -12,7 +12,11 @@ extern bool Eviscosity;
 extern float viscosity;
 extern bool Espawn;
 extern float spawnrate;
-
+extern bool CollisionMerge;
+extern bool Edecay;
+extern bool Edecaylimit;
+extern float Bdecay;
+extern float decaylimit;
 
 
 

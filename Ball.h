@@ -29,6 +29,10 @@ public:
     float radius;
     int color[3];
     void CalcAttraction(std::vector<Ball> &Balls);
+    float getSpeed();
+    void DoDecay();
+    bool DoCheckUnspawn();
+
 
 
 private:

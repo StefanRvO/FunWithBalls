@@ -58,6 +58,11 @@ void Ball::setSpeed(double speed) {
     direction.x*=speed;
     direction.y*=speed;
 }
+
+float Ball::getSpeed() {
+    return direction.x/unitvektor(direction).x;
+}
+
 void Ball::setDirection(double x, double y)
 {
     direction.x=x;
@@ -105,22 +110,43 @@ void Ball::CollisionDetect(std::vector<Ball> &Balls )
 
         //Real test
         if (sqrt((placement.x-CurBall.placement.x)*(placement.x-CurBall.placement.x)+(placement.y-CurBall.placement.y)*(placement.y-CurBall.placement.y))<=(radius+CurBall.radius)) {
-        //std::cout << "collision" << std::endl;
+            //std::cout << "collision" << std::endl;
 
-        //Calculate collision point
-        /*vektor collision;
-        collision.x=(placement.x*CurBall.radius+CurBall.placement.x*radius)/(CurBall.radius+radius);
-        collision.y=(placement.y*CurBall.radius+CurBall.placement.y*radius)/(CurBall.radius+radius);
-        */
-        //Calculate new directions
-        float x=(direction.x*(radius-CurBall.radius)+(2*CurBall.radius*CurBall.direction.x))/(radius+CurBall.radius);
-        float y=(direction.y*(radius-CurBall.radius)+(2*CurBall.radius*CurBall.direction.y))/(radius+CurBall.radius);
-        float x2=(CurBall.direction.x*(CurBall.radius-radius)+(2*radius*direction.x))/(radius+CurBall.radius);
-        float y2=(CurBall.direction.y*(CurBall.radius-radius)+(2*radius*direction.y))/(radius+CurBall.radius);
-        CurBall.setDirection(x2,y2);
-        setDirection(x,y);
-        CurBall.MakeStep();
-        MakeStep();
+            if (!CollisionMerge)
+            {
+                //Calculate new directions
+                float x=(direction.x*(radius-CurBall.radius)+(2*CurBall.radius*CurBall.direction.x))/(radius+CurBall.radius);
+                float y=(direction.y*(radius-CurBall.radius)+(2*CurBall.radius*CurBall.direction.y))/(radius+CurBall.radius);
+                float x2=(CurBall.direction.x*(CurBall.radius-radius)+(2*radius*direction.x))/(radius+CurBall.radius);
+                float y2=(CurBall.direction.y*(CurBall.radius-radius)+(2*radius*direction.y))/(radius+CurBall.radius);
+                CurBall.setDirection(x2,y2);
+                setDirection(x,y);
+                CurBall.MakeStep();
+                MakeStep();
+            }
+            else
+            {
+                //Calculate collision point
+                vektor collision;
+                collision.x=(placement.x*CurBall.radius*CurBall.radius+CurBall.placement.x*radius*radius)/(CurBall.radius*CurBall.radius+radius*radius);
+                collision.y=(placement.y*CurBall.radius*CurBall.radius+CurBall.placement.y*radius*radius)/(CurBall.radius*CurBall.radius+radius*radius);
+                int newcolor[3];
+                newcolor[0]=color[0]*radius+CurBall.radius*color[0]/(radius+CurBall.radius);
+                newcolor[1]=color[1]*radius+CurBall.radius*color[1]/(radius+CurBall.radius);
+                newcolor[2]=color[2]*radius+CurBall.radius*color[2]/(radius+CurBall.radius);
+                float newradius=sqrt(radius*radius+CurBall.radius*CurBall.radius);
+
+                //Make New Ball
+                direction.x=(direction.x*radius+CurBall.direction.x*CurBall.radius)/(radius+CurBall.radius);
+                direction.y=(direction.y*radius+CurBall.direction.y*CurBall.radius)/(radius+CurBall.radius);
+                setId(Balls[Balls.size()-1].getId()+1);
+                radius=newradius;
+                *color=*newcolor;
+                placement=collision;
+                //std::cout << abs(&Balls[0]-&CurBall) << std::endl;
+                Balls.erase(Balls.begin()+abs(&Balls[0]-&CurBall));
+
+            }
         }
     }
 }
@@ -151,5 +177,14 @@ void Ball::CalcAttraction(std::vector<Ball> &Balls) {
 
 
 }
+void Ball::DoDecay() {
+    radius=pow(pow(radius,4)*1./Bdecay,1./4);
+}
+bool Ball::DoCheckUnspawn()
+{
+    if (radius<decaylimit) return false;
+    return true;
+}
+
 
 
