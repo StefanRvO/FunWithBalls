@@ -3,8 +3,8 @@
 #include <allegro5/allegro.h>
 #include <vector>
 typedef struct{
-    float x;
-    float y;
+    double x;
+    double y;
     } vektor;
 
 
@@ -17,8 +17,8 @@ public:
     Ball(float x,float y,int r,int g,int b);
     Ball(float x,float y,int r,int g,int b,float radi);
     ~Ball();
-    void setSpeed(float speed);
-    void setDirection(float x, float y);
+    void setSpeed(double speed);
+    void setDirection(double x, double y);
     void Draw();
     void MakeStep();
     void setId(int);

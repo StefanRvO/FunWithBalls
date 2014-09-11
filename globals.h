@@ -8,6 +8,8 @@ extern bool Egravity;
 extern bool BoxBounce;
 extern bool Collision;
 extern bool ShowSettings;
+extern bool Eviscosity;
+extern float viscosity;
 
 
 

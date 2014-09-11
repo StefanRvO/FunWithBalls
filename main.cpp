@@ -7,7 +7,7 @@
 #include <vector>
 #include <time.h>
 #include "Ball.h"
-#include <math.h>
+#include <cmath>
 #include "globals.h"
 
 void DrawSettings();
@@ -73,6 +73,8 @@ int main(int argc, char **argv){
 
     //Main loop
     while(true) {
+        std::cout << Balls[0].placement.x << std::endl;
+        std::cout << Balls[0].direction.x << std::endl;
         while (!al_is_event_queue_empty(event_queue)) {
             al_get_next_event(event_queue,&ev);
             HandleEvent(ev);
@@ -104,7 +106,7 @@ int main(int argc, char **argv){
 
 void DrawSettings() {
     //Make font
-    ALLEGRO_FONT *font =al_load_ttf_font("FreeSans.ttf",SIZEX/100,0);
+    ALLEGRO_FONT *font =al_load_ttf_font("FreeSans.ttf",SIZEX/90,0);
     //Draw settings box
     al_draw_line(SIZEX*0.2,0,SIZEX*0.2,SIZEY*0.2,al_map_rgb(0,0,255),2);
     al_draw_line(SIZEX*0.2,SIZEY*0.2,0,SIZEY*0.2,al_map_rgb(0,0,255),2);
@@ -127,7 +129,13 @@ void DrawSettings() {
     al_draw_textf(font, al_map_rgb(0,0,255), 0, SIZEY*0.105,ALLEGRO_ALIGN_LEFT, "Collision: ");
     if (Collision) al_draw_filled_rectangle(SIZEX*0.05,SIZEY*0.11,SIZEX*0.06,SIZEY*0.125,al_map_rgb(0,0,255));
     else al_draw_rectangle(SIZEX*0.05,SIZEY*0.11,SIZEX*0.06,SIZEY*0.125,al_map_rgb(0,0,255),1);
-
+    //Viscosity
+    al_draw_line(SIZEX*0.2,SIZEY*0.135,0,SIZEY*0.135,al_map_rgb(0,0,255),2);
+    if (Eviscosity) al_draw_textf(font, al_map_rgb(0,0,255), 0, SIZEY*0.135,ALLEGRO_ALIGN_LEFT, "Viscosity: %.3f",viscosity);
+    else al_draw_textf(font, al_map_rgb(50,50,50), 0, SIZEY*0.135,ALLEGRO_ALIGN_LEFT, "Viscosity: %.3f",viscosity);
+    al_draw_line(SIZEX*0.19,SIZEY*0.15,SIZEX*0.08,SIZEY*0.15,al_map_rgb(0,0,255),2);
+    float ViscContX=(viscosity+5)/10.*0.11+0.08; //Incomplete/correct
+    al_draw_filled_circle(SIZEX*ViscContX,SIZEY*0.15,SIZEX*0.005,al_map_rgb(0,0,255));
 
     al_destroy_font(font);
 
@@ -137,29 +145,46 @@ void DrawSettings() {
 void HandleEvent(ALLEGRO_EVENT &event) {
 
     if (event.type==ALLEGRO_EVENT_DISPLAY_CLOSE) std::exit(0);
-    if (event.type==ALLEGRO_EVENT_KEY_DOWN) { //Keyboard event
+    else if (event.type==ALLEGRO_EVENT_KEY_DOWN) { //Keyboard event
         if (event.keyboard.keycode==ALLEGRO_KEY_S) ShowSettings=!ShowSettings;
+        return;
 
     }
-    if (event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) { //Mouse Event
-            if (ShowSettings) {
-        if (event.mouse.x>SIZEX*0.09  and event.mouse.x<SIZEX*0.10 and event.mouse.y>SIZEY*0.075 and event.mouse.y<SIZEY*0.09) BoxBounce=!BoxBounce;
-        else if (event.mouse.x>SIZEX*0.05  and event.mouse.x<SIZEX*0.06 and event.mouse.y>SIZEY*0.11 and event.mouse.y<SIZEY*0.125) Collision=!Collision;
-        else if (event.mouse.x>SIZEX*0.0  and event.mouse.x<SIZEX*0.07 and event.mouse.y>SIZEY*0.04 and event.mouse.y<SIZEY*0.06) Egravity=!Egravity;
-        else if (event.mouse.x>SIZEX*0.07  and event.mouse.x<SIZEX*0.2 and event.mouse.y>SIZEY*0.04 and event.mouse.y<SIZEY*0.06) {
-                Egravity=true;
-                 float relx= (float)event.mouse.x/SIZEX;
-                relx-=0.07;
-                relx*=1;
-                relx/=0.12;
-                relx-=0.5;
-                GRAVITY=relx;
+    else if (event.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) //Mouse Event
+    {
+        if (ShowSettings)
+        {
+            if (event.mouse.x>SIZEX*0.09  and event.mouse.x<SIZEX*0.10 and event.mouse.y>SIZEY*0.075 and event.mouse.y<SIZEY*0.09) BoxBounce=!BoxBounce;
+            else if (event.mouse.x>SIZEX*0.05  and event.mouse.x<SIZEX*0.06 and event.mouse.y>SIZEY*0.11 and event.mouse.y<SIZEY*0.125) Collision=!Collision;
+            else if (event.mouse.x>SIZEX*0.0  and event.mouse.x<SIZEX*0.07 and event.mouse.y>SIZEY*0.04 and event.mouse.y<SIZEY*0.06) Egravity=!Egravity;
+            else if (event.mouse.x>SIZEX*0.0  and event.mouse.x<SIZEX*0.08 and event.mouse.y>SIZEY*0.14 and event.mouse.y<SIZEY*0.16) Eviscosity=!Eviscosity;
+
         }
-
-
-            }
+        return;
     }
-
-
+    ALLEGRO_MOUSE_STATE state;
+    al_get_mouse_state(&state);
+    if(state.buttons & 1)
+    {
+        if (state.x>SIZEX*0.07  and state.x<SIZEX*0.19 and state.y>SIZEY*0.04 and state.y<SIZEY*0.06)
+        {
+            Egravity=true;
+            float relx= (float)state.x/SIZEX;
+            relx-=0.07;
+            relx*=1;
+            relx/=0.12;
+            relx-=0.5;
+            GRAVITY=relx;
+        }
+        else if (state.x>SIZEX*0.08  and state.x<SIZEX*0.19 and state.y>SIZEY*0.14 and state.y<SIZEY*0.16)
+        {
+            Eviscosity=true;
+            float relx= (float)state.x/SIZEX;
+            relx-=0.08;
+            relx*=10;
+            relx/=0.11;
+            relx-=5;
+            viscosity=relx;
+        }
     }
-
+}

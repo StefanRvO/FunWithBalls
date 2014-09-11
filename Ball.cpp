@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
-#include<math.h>
+#include <cmath>
 #include<iostream>
 #include "globals.h"
 
@@ -53,12 +53,12 @@ vektor Ball::unitvektor(vektor v) {
     v2.y=v.y/sqrt(v.x*v.x+v.y*v.y);
     return v2;
 }
-void Ball::setSpeed(float speed) {
+void Ball::setSpeed(double speed) {
     direction=unitvektor(direction);
     direction.x*=speed;
     direction.y*=speed;
 }
-void Ball::setDirection(float x, float y)
+void Ball::setDirection(double x, double y)
 {
     direction.x=x;
     direction.y=y;
@@ -67,21 +67,34 @@ void Ball::MakeStep()
 {
     placement.x+=direction.x;
     placement.y+=direction.y;
-    if (BoxBounce) {
+    if (BoxBounce)
+    {
         if (placement.x+radius>SIZEX and direction.x>0)  direction.x=-direction.x;
         if (placement.x-radius<0 and direction.x<0) direction.x=-direction.x;
         if (placement.y+radius>SIZEY and direction.y>0)  direction.y=-direction.y;
         if (placement.y-radius<0 and direction.y<0) direction.y=-direction.y;
     }
+    if (Eviscosity)
+    {
+        float visforce=viscosity*radius*sqrt(direction.x*direction.x+direction.y*direction.y)/50.;
+        float visacc=visforce/(radius*radius);
+        vektor forcedir;
+        forcedir=unitvektor(direction);
+        direction.x-=forcedir.x*visacc;
+        direction.y-=forcedir.y*visacc;
+    }
 }
-void Ball::Draw() {
+void Ball::Draw()
+{
     al_draw_filled_circle(placement.x,placement.y,radius,al_map_rgb(color[0],color[1],color[2]));
 
 }
-void Ball::setId(int identi) {
+void Ball::setId(int identi)
+{
     id=identi;
 }
-void Ball::CollisionDetect(std::vector<Ball> &Balls ) {
+void Ball::CollisionDetect(std::vector<Ball> &Balls )
+{
     for(auto &CurBall : Balls) {
         if (CurBall.getId()==id) continue;
         //Test for proximity before real test
