@@ -1,0 +1,10 @@
+#ifndef DEFINES_H_INCLUDED
+#define DEFINES_H_INCLUDED
+
+#define SIZEX 1300
+#define SIZEY 700
+#define GRAVITY .0f
+
+
+
+#endif // DEFINES_H_INCLUDED
