@@ -4,7 +4,8 @@
 #include <allegro5/allegro_primitives.h>
 #include<math.h>
 #include<iostream>
-#include "defines.h"
+#include "globals.h"
+
 Ball::Ball(float x,float y) {
     placement.x=x;
     placement.y=y;
@@ -66,10 +67,12 @@ void Ball::MakeStep()
 {
     placement.x+=direction.x;
     placement.y+=direction.y;
-    if (placement.x+radius>SIZEX and direction.x>0)  direction.x=-direction.x;
-    if (placement.x-radius<0 and direction.x<0) direction.x=-direction.x;
-    if (placement.y+radius>SIZEY and direction.y>0)  direction.y=-direction.y;
-    if (placement.y-radius<0 and direction.y<0) direction.y=-direction.y;
+    if (BoxBounce) {
+        if (placement.x+radius>SIZEX and direction.x>0)  direction.x=-direction.x;
+        if (placement.x-radius<0 and direction.x<0) direction.x=-direction.x;
+        if (placement.y+radius>SIZEY and direction.y>0)  direction.y=-direction.y;
+        if (placement.y-radius<0 and direction.y<0) direction.y=-direction.y;
+    }
 }
 void Ball::Draw() {
     al_draw_filled_circle(placement.x,placement.y,radius,al_map_rgb(color[0],color[1],color[2]));

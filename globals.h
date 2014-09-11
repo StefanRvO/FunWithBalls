@@ -3,7 +3,12 @@
 
 #define SIZEX 1300
 #define SIZEY 700
-#define GRAVITY .0f
+extern float GRAVITY;
+extern bool Egravity;
+extern bool BoxBounce;
+extern bool Collision;
+extern bool ShowSettings;
+
 
 
 
