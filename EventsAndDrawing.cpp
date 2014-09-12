@@ -223,8 +223,23 @@ void HandleNoEventMouse(std::vector<Ball> &Balls) {
     }
     ALLEGRO_KEYBOARD_STATE key_state;
     al_get_keyboard_state(&key_state);
-    if(al_key_down(&key_state,ALLEGRO_KEY_PAD_MINUS)) { zoomScale-=zoomScale*0.02;};
-    if(al_key_down(&key_state,ALLEGRO_KEY_PAD_PLUS)) { zoomScale+=zoomScale*0.02;};
+    if(al_key_down(&key_state,ALLEGRO_KEY_PAD_MINUS)) 
+    { 
+        float newZoomScale=zoomScale-zoomScale*0.02;
+        float zoom_ratio=(newZoomScale)/zoomScale;
+        xOffSet-=(SIZEX/zoomScale)*(1-zoom_ratio)/2.;
+        yOffSet-=(SIZEY/zoomScale)*(1-zoom_ratio)/2.;
+        zoomScale=newZoomScale;
+    
+    }
+    if(al_key_down(&key_state,ALLEGRO_KEY_PAD_PLUS)) 
+    {
+        float newZoomScale=zoomScale+zoomScale*0.02;
+        float zoom_ratio=(newZoomScale)/zoomScale;
+        xOffSet-=(SIZEX/zoomScale)*(1-zoom_ratio)/2.;
+        yOffSet-=(SIZEY/zoomScale)*(1-zoom_ratio)/2.;
+        zoomScale=newZoomScale; 
+    }
     if(al_key_down(&key_state,ALLEGRO_KEY_DOWN)) yOffSet+=10/zoomScale;
     if(al_key_down(&key_state,ALLEGRO_KEY_UP)) yOffSet-=10/zoomScale;
     if(al_key_down(&key_state,ALLEGRO_KEY_LEFT)) xOffSet-=10/zoomScale;
