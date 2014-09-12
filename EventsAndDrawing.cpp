@@ -33,10 +33,10 @@ void DrawSettings(ALLEGRO_FONT *font) { //Yeah it looks like shit.. Blame Allegr
     al_draw_filled_circle(SIZEX*ViscContX,SIZEY*0.15,SIZEX*0.005,al_map_rgb(0,0,255));
     //Spawning
     al_draw_line(SIZEX*SETTINGSSIZEX,SIZEY*0.165,0,SIZEY*0.165,al_map_rgb(0,0,255),2);
-    if (Espawn) al_draw_textf(font, al_map_rgb(0,0,255), 0, SIZEY*0.165,ALLEGRO_ALIGN_LEFT, "Spawnrate: %.3f",spawnrate*10);
-    else al_draw_textf(font, al_map_rgb(50,50,50), 0, SIZEY*0.165,ALLEGRO_ALIGN_LEFT, "Spawnrate: %.3f",spawnrate*10);
+    if (Espawn) al_draw_textf(font, al_map_rgb(0,0,255), 0, SIZEY*0.165,ALLEGRO_ALIGN_LEFT, "Spawnrate: %.3f",spawnrate*2);
+    else al_draw_textf(font, al_map_rgb(50,50,50), 0, SIZEY*0.165,ALLEGRO_ALIGN_LEFT, "Spawnrate: %.3f",spawnrate*2);
     al_draw_line(SIZEX*0.19,SIZEY*0.18,SIZEX*0.09,SIZEY*0.18,al_map_rgb(0,0,255),2);
-    float spawnContX=(spawnrate)/0.5*0.09+0.09; //Incomplete/correct
+    float spawnContX=(spawnrate)/2.5*0.09+0.09; //Incomplete/correct
     al_draw_filled_circle(SIZEX*spawnContX,SIZEY*0.18,SIZEX*0.005,al_map_rgb(0,0,255));
     //Decay
     al_draw_line(SIZEX*SETTINGSSIZEX,SIZEY*0.195,0,SIZEY*0.195,al_map_rgb(0,0,255),2);
@@ -152,7 +152,7 @@ void HandleEvent(ALLEGRO_EVENT &event, std::vector<Ball> &Balls) {
                 Espawn=true;
                 float relx= (float)state.x/SIZEX;
                 relx-=0.09;
-                relx*=0.5;
+                relx*=2.5;
                 relx/=0.09;
                 spawnrate=relx;
             }
@@ -244,4 +244,11 @@ void HandleNoEventMouse(std::vector<Ball> &Balls) {
     if(al_key_down(&key_state,ALLEGRO_KEY_UP)) yOffSet-=10/zoomScale;
     if(al_key_down(&key_state,ALLEGRO_KEY_LEFT)) xOffSet-=10/zoomScale;
     if(al_key_down(&key_state,ALLEGRO_KEY_RIGHT)) xOffSet+=10/zoomScale;
+
+    if(al_key_down(&key_state,ALLEGRO_KEY_C))
+    {
+        auto CenterOfMass=GetCenterOfMass(Balls);
+        xOffSet=CenterOfMass.x-(SIZEX/zoomScale)/2.;
+        yOffSet=CenterOfMass.y-(SIZEY/zoomScale)/2.;
+    }
 }

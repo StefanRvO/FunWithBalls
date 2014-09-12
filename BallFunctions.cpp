@@ -46,4 +46,17 @@ int MaxId(std::vector<Ball> &Balls)
         }
     return max;
 }
-
+vektor GetCenterOfMass(std::vector<Ball> &Balls) 
+    {
+    float totalmass=0;
+    vektor CoM={0,0};
+    for(auto &CurBall :Balls) 
+    {
+        totalmass+=CurBall.radius*CurBall.radius;
+        CoM.x+=CurBall.placement.x*CurBall.radius*CurBall.radius;
+        CoM.y+=CurBall.placement.y*CurBall.radius*CurBall.radius;
+    }
+    CoM.x/=totalmass;
+    CoM.y/=totalmass;
+    return CoM;
+}

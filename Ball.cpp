@@ -87,10 +87,10 @@ void Ball::MakeStep()
         direction.x-=forcedir.x*visacc;
         direction.y-=forcedir.y*visacc;
     }
-    if (direction.x==NAN or direction.x==-NAN) direction.x=0;
-    if (direction.y==NAN or direction.y==-NAN) direction.y=0;
-    if (placement.x==NAN or placement.x==-NAN) placement.x=0;
-    if (placement.y==NAN or placement.y==-NAN) placement.y=0;
+    if (isnan(direction.x)) direction.x=0;
+    if (isnan(direction.y)) direction.y=0;
+    if (isnan(placement.x)) placement.x=0;
+    if (isnan(placement.y)) placement.y=0;
     placement.x+=direction.x;
     placement.y+=direction.y;
 }
@@ -135,17 +135,16 @@ void Ball::CollisionDetect(std::vector<Ball> &Balls )
                 vektor collision;
                 collision.x=(placement.x*radius+CurBall.placement.x*CurBall.radius)/(CurBall.radius+radius);
                 collision.y=(placement.y*radius+CurBall.placement.y*CurBall.radius)/(CurBall.radius+radius);
-                int newcolor[3];
-                newcolor[0]=color[0]*radius+CurBall.radius*color[0]/(radius+CurBall.radius);
-                newcolor[1]=color[1]*radius+CurBall.radius*color[1]/(radius+CurBall.radius);
-                newcolor[2]=color[2]*radius+CurBall.radius*color[2]/(radius+CurBall.radius);
+
+                color[0]=(color[0]*radius*radius+CurBall.radius*CurBall.radius*CurBall.color[0])/(radius*radius+CurBall.radius*CurBall.radius)+.1;
+                color[1]=(color[1]*radius*radius+CurBall.radius*CurBall.radius*CurBall.color[1])/(radius*radius+CurBall.radius*CurBall.radius)+.1;
+                color[2]=(color[2]*radius*radius+CurBall.radius*CurBall.radius*CurBall.color[2])/(radius*radius+CurBall.radius*CurBall.radius)+.1;
                 float newradius=sqrt(radius*radius+CurBall.radius*CurBall.radius);
 
                 //Make New Ball
                 direction.x=(direction.x*radius+CurBall.direction.x*CurBall.radius)/(radius+CurBall.radius);
                 direction.y=(direction.y*radius+CurBall.direction.y*CurBall.radius)/(radius+CurBall.radius);
                 radius=newradius;
-                *color=*newcolor;
                 placement=collision;
                 //std::cout << abs(&Balls[0]-&CurBall) << std::endl;
                 Balls.erase(Balls.begin()+abs(&Balls[0]-&CurBall));
@@ -165,6 +164,7 @@ void Ball::CalcAttractions(std::vector<Ball> &Balls) {
     for(auto &CurBall : Balls) {
         if (CurBall.getId()==id) continue;
         float distance=sqrt((placement.x-CurBall.placement.x)*(placement.x-CurBall.placement.x)+(placement.y-CurBall.placement.y)*(placement.y-CurBall.placement.y));
+        if (distance<0.0001) distance=0.0001;
         float AttractionForce=GRAVITY*(CurBall.radius*CurBall.radius)*radius*radius/(pow(distance,1.1));
         vektor AtractVek;
         AtractVek.x=CurBall.placement.x-placement.x;
@@ -185,6 +185,7 @@ void Ball::CalcAttractions(std::vector<Ball> &Balls) {
 void Ball::CalculateSingleAttraction(vektor Atrpos,double atrmass)
 {
     float distance=sqrt((placement.x-Atrpos.x)*(placement.x-Atrpos.x)+(placement.y-Atrpos.y)*(placement.y-Atrpos.y));
+    if (distance<0.0001) distance=0.0001;
     float AttractionForce;
     if (atrmass>0) AttractionForce=1*(atrmass*atrmass)*radius*radius/(pow(distance,1.1));
     else AttractionForce=-1*(atrmass*atrmass)*radius*radius/(pow(distance,1.1));
