@@ -126,7 +126,7 @@ void DrawSettings(ALLEGRO_FONT *font) { //Yeah it looks like shit.. Blame Allegr
     if (Egravity) al_draw_textf(font, al_map_rgb(0,0,255), 0, SIZEY*0.035,ALLEGRO_ALIGN_LEFT, "Gravity: %.3f",GRAVITY);
     else al_draw_textf(font, al_map_rgb(50,50,50), 0, SIZEY*0.035,ALLEGRO_ALIGN_LEFT, "Gravity: %.3f",GRAVITY);
     al_draw_line(SIZEX*0.19,SIZEY*0.048,SIZEX*0.07,SIZEY*0.048,al_map_rgb(0,0,255),2);
-    float GravityContX=(GRAVITY+0.5)/1.*0.12+0.07; //Incomplete/correct
+    float GravityContX=(GRAVITY+0.25)/.5*0.12+0.07; //Incomplete/correct
     al_draw_filled_circle(SIZEX*GravityContX,SIZEY*0.048,SIZEX*0.005,al_map_rgb(0,0,255));
     //BoxBounce
     al_draw_line(SIZEX*0.2,SIZEY*0.065,0,SIZEY*0.065,al_map_rgb(0,0,255),2);
@@ -215,9 +215,9 @@ void HandleEvent(ALLEGRO_EVENT &event) {
             Egravity=true;
             float relx= (float)state.x/SIZEX;
             relx-=0.07;
-            relx*=1;
+            relx*=.5;
             relx/=0.12;
-            relx-=0.5;
+            relx-=0.25;
             GRAVITY=relx;
         }
         else if (state.x>SIZEX*0.08  and state.x<SIZEX*0.19 and state.y>SIZEY*0.14 and state.y<SIZEY*0.16)

@@ -160,7 +160,7 @@ void Ball::CalcAttraction(std::vector<Ball> &Balls) {
     for(auto &CurBall : Balls) {
         if (CurBall.getId()==id) continue;
         float distance=sqrt((placement.x-CurBall.placement.x)*(placement.x-CurBall.placement.x)+(placement.y-CurBall.placement.y)*(placement.y-CurBall.placement.y));
-        float AttractionForce=GRAVITY*CurBall.radius*radius/distance;
+        float AttractionForce=GRAVITY*(CurBall.radius*CurBall.radius)*radius*radius/distance;
         vektor AtractVek;
         AtractVek.x=CurBall.placement.x-placement.x;
         AtractVek.y=CurBall.placement.y-placement.y;
