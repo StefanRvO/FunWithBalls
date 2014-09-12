@@ -1,4 +1,4 @@
---Fun with Balls--
+#Fun with Balls#
 
 The code is Licensed under the Beerware license by Stefan Ravn van Overeem.
 
@@ -6,9 +6,9 @@ The Font - FreeSans.ttf - Is licensed under the GPLv3 by the FSF. https://www.gn
 
 
 
---Compilation--
+##Compilation-##
 
-#Linux#
+###Linux###
 
 To compile under Linux you need the allegro libraries on ubuntu install these with:
 apt-get install liballegro5.0 liballegro5-dev liballegro-ttf5.0 liballegro-ttf5-dev
@@ -22,7 +22,7 @@ clang++ *.cpp -o FunWithBalls -Ofast -std=c++11 -lallegro -lallegro_primitives -
 
 When running FreeSans.ttf should be in the same directory as the executable.
 
-#Windows#
+###Windows###
 To compile on windows (sick) you have to do some wizardy.
 
 Download allegro https://www.allegro.cc/files/
@@ -31,38 +31,38 @@ Distribute with bin/liballegro-5.0.10-monolith-mt.a and FreeSans.ttf
 
 
 
---Controls--
+##Controls##
 
 Open Settings by pressing "s".
 
 The settings are:
 
-#Gravity#
+###Gravity###
 Attraction between balls. Balls with higher radius have an highed gravity. 
 You can also choose a negative gravity. This results in repulsion.
 
-#Bounce on Edges#
+###Bounce on Edges###
 Toggles between wheter the balls bounces off the edges or goes through.
 
-#Collision#
+###Collision###
 Toggles Collsions between balls on and off.
 
-#Viscosity#
+###Viscosity###
 Choose the viscosity of the medium the balls travel in.
 This results in a resistance which slows the balls down.
 A bigger ball slows faster than a small.
 You can choose a negative viscosity.
 
-#Spawnrate#
+###Spawnrate###
 Choose how often a new ball is spawned
 
-#Decay#
+###Decay###
 This shrinks the balls gradualy. 
 You can choose a negative decay-rate, which causes the balls to grow.
 
-#UnSpawnsize#
+###UnSpawnsize###
 Balls smaller than this size will be destroyed
 
-#CollisionMerge#
+###CollisionMerge###
 Balls merge on collision. This is still buggy.
 
