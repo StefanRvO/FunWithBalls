@@ -28,7 +28,8 @@ public:
     vektor direction;
     float radius;
     int color[3];
-    void CalcAttraction(std::vector<Ball> &Balls);
+    void CalcAttractions(std::vector<Ball> &Balls);
+    void CalculateSingleAttraction(vektor Atrpos,double atrmass);
     float getSpeed();
     void DoDecay();
     bool DoCheckUnspawn();

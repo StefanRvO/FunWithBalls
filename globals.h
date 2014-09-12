@@ -17,7 +17,11 @@ extern bool Edecay;
 extern bool Edecaylimit;
 extern float Bdecay;
 extern float decaylimit;
-
+extern bool EMouseattraction;
+extern float Mouseattraction;
+extern bool MouseSpawnCont;
+extern bool MouseSpawn;
+extern float MouseSpawnSize;
 
 
 #endif // DEFINES_H_INCLUDED

@@ -5,6 +5,7 @@
 #include<iostream>
 #include "Ball.h"
 #include "globals.h"
+#include "BallFunctions.h"
 
 Ball::Ball(float x,float y) {
     placement.x=x;
@@ -86,6 +87,10 @@ void Ball::MakeStep()
         direction.x-=forcedir.x*visacc;
         direction.y-=forcedir.y*visacc;
     }
+    if (direction.x==NAN or direction.x==-NAN) direction.x=0;
+    if (direction.y==NAN or direction.y==-NAN) direction.y=0;
+    if (placement.x==NAN or placement.x==-NAN) placement.x=0;
+    if (placement.y==NAN or placement.y==-NAN) placement.y=0;
     placement.x+=direction.x;
     placement.y+=direction.y;
 }
@@ -128,8 +133,8 @@ void Ball::CollisionDetect(std::vector<Ball> &Balls )
             {
                 //Calculate collision point
                 vektor collision;
-                collision.x=(placement.x*CurBall.radius*CurBall.radius+CurBall.placement.x*radius*radius)/(CurBall.radius*CurBall.radius+radius*radius);
-                collision.y=(placement.y*CurBall.radius*CurBall.radius+CurBall.placement.y*radius*radius)/(CurBall.radius*CurBall.radius+radius*radius);
+                collision.x=(placement.x*radius+CurBall.placement.x*CurBall.radius)/(CurBall.radius+radius);
+                collision.y=(placement.y*radius+CurBall.placement.y*CurBall.radius)/(CurBall.radius+radius);
                 int newcolor[3];
                 newcolor[0]=color[0]*radius+CurBall.radius*color[0]/(radius+CurBall.radius);
                 newcolor[1]=color[1]*radius+CurBall.radius*color[1]/(radius+CurBall.radius);
@@ -139,12 +144,12 @@ void Ball::CollisionDetect(std::vector<Ball> &Balls )
                 //Make New Ball
                 direction.x=(direction.x*radius+CurBall.direction.x*CurBall.radius)/(radius+CurBall.radius);
                 direction.y=(direction.y*radius+CurBall.direction.y*CurBall.radius)/(radius+CurBall.radius);
-                setId(Balls[Balls.size()-1].getId()+1);
                 radius=newradius;
                 *color=*newcolor;
                 placement=collision;
                 //std::cout << abs(&Balls[0]-&CurBall) << std::endl;
                 Balls.erase(Balls.begin()+abs(&Balls[0]-&CurBall));
+                setId(MaxId(Balls)+1);
 
             }
         }
@@ -156,11 +161,11 @@ int Ball::getId() {
     return id;
 }
 
-void Ball::CalcAttraction(std::vector<Ball> &Balls) {
+void Ball::CalcAttractions(std::vector<Ball> &Balls) {
     for(auto &CurBall : Balls) {
         if (CurBall.getId()==id) continue;
         float distance=sqrt((placement.x-CurBall.placement.x)*(placement.x-CurBall.placement.x)+(placement.y-CurBall.placement.y)*(placement.y-CurBall.placement.y));
-        float AttractionForce=GRAVITY*(CurBall.radius*CurBall.radius)*radius*radius/distance;
+        float AttractionForce=GRAVITY*(CurBall.radius*CurBall.radius)*radius*radius/(pow(distance,1.1));
         vektor AtractVek;
         AtractVek.x=CurBall.placement.x-placement.x;
         AtractVek.y=CurBall.placement.y-placement.y;
@@ -168,13 +173,35 @@ void Ball::CalcAttraction(std::vector<Ball> &Balls) {
         vektor ForceVek;
         ForceVek.x=AtractVek.x*AttractionForce;
         ForceVek.y=AtractVek.y*AttractionForce;
-        direction.x+=ForceVek.x/radius;
-        direction.y+=ForceVek.y/radius;
+        direction.x+=ForceVek.x/(radius*radius);
+        direction.y+=ForceVek.y/(radius*radius);
 
 
 
     }
 
+
+}
+void Ball::CalculateSingleAttraction(vektor Atrpos,double atrmass)
+{
+    float distance=sqrt((placement.x-Atrpos.x)*(placement.x-Atrpos.x)+(placement.y-Atrpos.y)*(placement.y-Atrpos.y));
+    float AttractionForce;
+    if (atrmass>0) AttractionForce=1*(atrmass*atrmass)*radius*radius/(pow(distance,1.1));
+    else AttractionForce=-1*(atrmass*atrmass)*radius*radius/(pow(distance,1.1));
+    if (abs(AttractionForce)>1000) 
+    {
+        if (AttractionForce>0) AttractionForce=1000;
+        else AttractionForce=-1000;
+    }
+    vektor AtractVek;
+    AtractVek.x=Atrpos.x-placement.x;
+    AtractVek.y=Atrpos.y-placement.y;
+    AtractVek=unitvektor(AtractVek);
+    vektor ForceVek;
+    ForceVek.x=AtractVek.x*AttractionForce;
+    ForceVek.y=AtractVek.y*AttractionForce;
+    direction.x+=ForceVek.x/(radius*radius);
+    direction.y+=ForceVek.y/(radius*radius);
 
 }
 void Ball::DoDecay() {
