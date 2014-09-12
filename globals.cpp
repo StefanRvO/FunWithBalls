@@ -1,3 +1,4 @@
+#include "globals.h"
 float GRAVITY=0.0;
 bool BoxBounce=true;
 bool Collision=true;

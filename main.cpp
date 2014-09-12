@@ -1,13 +1,14 @@
-#include <stdio.h>
+#include <cstdio>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <iostream>
 #include <vector>
-#include <time.h>
-#include "Ball.h"
+#include <ctime>
 #include <cmath>
+#include <cstdlib>
+#include "Ball.h"
 #include "globals.h"
 
 

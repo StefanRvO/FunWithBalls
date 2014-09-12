@@ -1,9 +1,9 @@
-#include "Ball.h"
-#include<stdlib.h>
+#include<cstdlib>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <cmath>
 #include<iostream>
+#include "Ball.h"
 #include "globals.h"
 
 Ball::Ball(float x,float y) {
@@ -70,8 +70,6 @@ void Ball::setDirection(double x, double y)
 }
 void Ball::MakeStep()
 {
-    placement.x+=direction.x;
-    placement.y+=direction.y;
     if (BoxBounce)
     {
         if (placement.x+radius>SIZEX and direction.x>0)  direction.x=-direction.x;
@@ -88,6 +86,8 @@ void Ball::MakeStep()
         direction.x-=forcedir.x*visacc;
         direction.y-=forcedir.y*visacc;
     }
+    placement.x+=direction.x;
+    placement.y+=direction.y;
 }
 void Ball::Draw()
 {
