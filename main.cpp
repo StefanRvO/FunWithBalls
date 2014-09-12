@@ -105,8 +105,11 @@ int main(int argc, char **argv){
         }
         if (Edecay) for(int i=0;i<Balls.size();i++) Balls[i].DoDecay();
         if (Edecaylimit and Balls.size()) for(int i=0;i<Balls.size();i++) if(!Balls[i].DoCheckUnspawn()) Balls.erase(Balls.begin()+i);
-        for(int i=0;i<Balls.size();i++) Balls[i].Draw();
-        al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.93, 0,ALLEGRO_ALIGN_LEFT, "Balls: %d",Balls.size());
+        for(int i=0;i<Balls.size();i++) if(Balls[i].radius*zoomScale>0.1) Balls[i].Draw();
+        al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, 0,ALLEGRO_ALIGN_LEFT, "Balls: %d",Balls.size());
+        al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, SIZEY*0.03,ALLEGRO_ALIGN_LEFT, "zoomScale: %.4f",zoomScale);
+        al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, SIZEY*0.06,ALLEGRO_ALIGN_LEFT, "xOffSet %.1f",xOffSet);
+        al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, SIZEY*0.09,ALLEGRO_ALIGN_LEFT, "yOffSet %.1f",yOffSet);
 
         if(ShowSettings) {
             DrawSettings(font);

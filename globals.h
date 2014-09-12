@@ -22,6 +22,9 @@ extern float Mouseattraction;
 extern bool MouseSpawnCont;
 extern bool MouseSpawn;
 extern float MouseSpawnSize;
+extern float zoomScale; 
+extern float xOffSet;
+extern float yOffSet;
 
 
 #endif // DEFINES_H_INCLUDED

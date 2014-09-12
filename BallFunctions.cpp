@@ -5,8 +5,8 @@ void SpawnBall(std::vector<Ball> &Balls)
     {
         count++;
         float radius=(rand()%10000/1000.+3.)/1.;
-        float placementx=rand()%SIZEX;
-        float placementy=rand()%SIZEY;
+        float placementx=rand()%SIZEX/zoomScale+xOffSet;
+        float placementy=rand()%SIZEY/zoomScale+yOffSet;
         Ball tmpball(placementx,placementy,radius);
         bool overlap=false;
         for(int j=0;j<Balls.size();j++) 

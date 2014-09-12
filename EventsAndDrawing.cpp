@@ -115,7 +115,7 @@ void HandleEvent(ALLEGRO_EVENT &event, std::vector<Ball> &Balls) {
         
         if (MouseSpawn and !MouseSpawnCont and (!(event.mouse.x<SIZEX*SETTINGSSIZEX and event.mouse.y<SIZEY*SETTINGSSIZEY) or !ShowSettings)) 
         {
-            SpawnBall(Balls,event.mouse.x,event.mouse.y,MouseSpawnSize,0,0);
+            SpawnBall(Balls,event.mouse.x/zoomScale+xOffSet,event.mouse.y/zoomScale+yOffSet,MouseSpawnSize,0,0);
         }    
 
 
@@ -210,15 +210,23 @@ void HandleNoEventMouse(std::vector<Ball> &Balls) {
     {
         if (MouseSpawnCont and MouseSpawn and (!(state.x<SIZEX*SETTINGSSIZEX and state.y<SIZEY*SETTINGSSIZEY) or !ShowSettings)) 
         {
-            SpawnBall(Balls,state.x,state.y,MouseSpawnSize,0,0);
+            SpawnBall(Balls,state.x/zoomScale+xOffSet,state.y/zoomScale+yOffSet,MouseSpawnSize,0,0);
             return;
         }
         if (EMouseattraction and (!(state.x<SIZEX*SETTINGSSIZEX and state.y<SIZEY*SETTINGSSIZEY) or !ShowSettings)) 
         {
             vektor mousatr;
-            mousatr.x=state.x;
-            mousatr.y=state.y;
+            mousatr.x=state.x/zoomScale+xOffSet;
+            mousatr.y=state.y/zoomScale+yOffSet;
             for( auto &ThisBall : Balls) ThisBall.CalculateSingleAttraction(mousatr,Mouseattraction);
         }
     }
+    ALLEGRO_KEYBOARD_STATE key_state;
+    al_get_keyboard_state(&key_state);
+    if(al_key_down(&key_state,ALLEGRO_KEY_PAD_MINUS)) { zoomScale-=zoomScale*0.02;};
+    if(al_key_down(&key_state,ALLEGRO_KEY_PAD_PLUS)) { zoomScale+=zoomScale*0.02;};
+    if(al_key_down(&key_state,ALLEGRO_KEY_DOWN)) yOffSet+=10/zoomScale;
+    if(al_key_down(&key_state,ALLEGRO_KEY_UP)) yOffSet-=10/zoomScale;
+    if(al_key_down(&key_state,ALLEGRO_KEY_LEFT)) xOffSet-=10/zoomScale;
+    if(al_key_down(&key_state,ALLEGRO_KEY_RIGHT)) xOffSet+=10/zoomScale;
 }

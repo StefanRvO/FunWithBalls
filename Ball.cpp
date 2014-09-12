@@ -73,10 +73,10 @@ void Ball::MakeStep()
 {
     if (BoxBounce)
     {
-        if (placement.x+radius>SIZEX and direction.x>0)  direction.x=-direction.x;
-        if (placement.x-radius<0 and direction.x<0) direction.x=-direction.x;
-        if (placement.y+radius>SIZEY and direction.y>0)  direction.y=-direction.y;
-        if (placement.y-radius<0 and direction.y<0) direction.y=-direction.y;
+        if (placement.x+radius>SIZEX/zoomScale+xOffSet and direction.x>0)  direction.x=-direction.x;
+        if (placement.x-radius<+xOffSet and direction.x<0) direction.x=-direction.x;
+        if (placement.y+radius>SIZEY/zoomScale+yOffSet and direction.y>0)  direction.y=-direction.y;
+        if (placement.y-radius<+yOffSet and direction.y<0) direction.y=-direction.y;
     }
     if (Eviscosity)
     {
@@ -96,7 +96,7 @@ void Ball::MakeStep()
 }
 void Ball::Draw()
 {
-    al_draw_filled_circle(placement.x,placement.y,radius,al_map_rgb(color[0],color[1],color[2]));
+    al_draw_filled_circle(placement.x*zoomScale-xOffSet*zoomScale,placement.y*zoomScale-yOffSet*zoomScale,radius*zoomScale,al_map_rgb(color[0],color[1],color[2]));
 
 }
 void Ball::setId(int identi)
