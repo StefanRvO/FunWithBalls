@@ -2,10 +2,11 @@
 #define BALL_H_INCLUDED
 #include <allegro5/allegro.h>
 #include <vector>
-typedef struct{
+typedef struct
+{
     double x;
     double y;
-    } vektor;
+} vektor;
 
 
 class Ball {

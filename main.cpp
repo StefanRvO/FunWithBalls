@@ -12,6 +12,7 @@
 #include "globals.h"
 #include "EventsAndDrawing.h"
 #include "BallFunctions.h"
+#include "QuadTree.h"
 
 
 int main(int argc, char **argv){
@@ -101,7 +102,29 @@ int main(int argc, char **argv){
         }
         for(int i=0;i<1;i++) {
             for(int i=0;i<Balls.size();i++) Balls[i].MakeStep();
-            if (Collision) for(int i=0;i<Balls.size();i++) Balls[i].CollisionDetect(Balls);
+        float maxX=-99999999999999;
+        float minX=999999999999999;
+        float minY=999999999999999;
+        float maxY=-99999999999999;
+        for(int i=0;i<Balls.size();i++)
+        {
+            if (Balls[i].placement.x+Balls[i].radius>maxX) maxX=Balls[i].placement.x+Balls[i].radius;
+            if (Balls[i].placement.x-Balls[i].radius<minX) minX=Balls[i].placement.x-Balls[i].radius;
+            if (Balls[i].placement.y+Balls[i].radius>maxY) maxY=Balls[i].placement.y+Balls[i].radius;
+            if (Balls[i].placement.y-Balls[i].radius<minY) minY=Balls[i].placement.y-Balls[i].radius;
+        }
+        TreeRectangle QTRect={minX,minY,maxX-minX,maxY-minY};
+        QuadTree qTree(0,QTRect);
+        for(auto ThisBall : Balls) qTree.insert(ThisBall);
+        qTree.Draw();
+            if (Collision) {
+                for(int i=0;i<Balls.size();i++)
+                {
+                    std::vector<Ball> rtBalls;
+                    qTree.retrieve(rtBalls,Balls[i]);
+                    Balls[i].CollisionDetect(rtBalls);
+                }
+            }
         }
         if (Edecay) for(int i=0;i<Balls.size();i++) Balls[i].DoDecay();
         if (Edecaylimit and Balls.size()) for(int i=0;i<Balls.size();i++) if(!Balls[i].DoCheckUnspawn()) Balls.erase(Balls.begin()+i);
