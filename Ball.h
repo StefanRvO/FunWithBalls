@@ -1,15 +1,24 @@
-#ifndef BALL_H_INCLUDED
-#define BALL_H_INCLUDED
 #include <allegro5/allegro.h>
+#include<cstdlib>
+#include <allegro5/allegro_primitives.h>
+#include <cmath>
+#include<iostream>
 #include <vector>
+#include "QuadTree.h"
+#include "globals.h"
+#include "BallFunctions.h"
+#ifndef vektorstruct
+#define vektorstruct
 typedef struct
 {
     double x;
     double y;
 } vektor;
+#endif
 
 
-class Ball {
+class Ball 
+{
 
 
 public:
@@ -41,6 +50,3 @@ private:
     vektor unitvektor(vektor);
     int id;
 };
-
-
-#endif // BALL_H_INCLUDED

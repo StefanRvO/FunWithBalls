@@ -77,3 +77,4 @@ vektor BallGetCenterOfMass(std::vector<Ball> &Balls)
     CoM.y/=totalmass;
     return CoM;
 }
+

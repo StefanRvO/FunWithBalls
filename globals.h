@@ -1,5 +1,5 @@
-#ifndef DEFINES_H_INCLUDED
-#define DEFINES_H_INCLUDED
+#ifndef DEFINES_H_GLOBALS
+#define DEFINES_H_GLOBALS
 
 #define SIZEX 1300
 #define SIZEY 700
@@ -29,4 +29,4 @@ extern double old_time;
 extern double new_time;
 extern bool ShowQuadTree;
 
-#endif // DEFINES_H_INCLUDED
+#endif // DEFINES_H_GLOBALS

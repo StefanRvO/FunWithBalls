@@ -1,4 +1,6 @@
-#pragma once
+#ifndef DEFINES_H_QUADTREE
+#define DEFINES_H_QUADTREE
+
 #include <vector>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
@@ -13,7 +15,11 @@ typedef struct {
     float width;
     float height;
 } TreeRectangle;
-
+typedef struct {
+    float x;
+    float y;
+    float radius;
+    } GravBody;
 class QuadTree
 {
     private:
@@ -37,4 +43,7 @@ class QuadTree
         void Draw();
         vektor getCenterOfMass();
         float getGravityRadius();
+        std::vector<GravBody> GetGravityBodies(Ball &ThisBall);
+        
 };
+#endif

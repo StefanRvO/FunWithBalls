@@ -155,3 +155,33 @@ float QuadTree::getGravityRadius()
     }
     return gravityRadius;
 }
+void  QuadTree::GetGravityBodies(std::vector<GravBody> &rBodies, Ball &ThisBall)
+{
+    if (nodes.size())
+    {
+        int index=getIndex(ThisBall);
+        for (int i=0;i<nodes.size();i++)
+        {
+            if (i!=index)
+            {
+                float distancex=abs(node.getCenterOfMass().x-ThisBall.placement.x);
+                float distancey=abs(node.getCenterOfMass().y-ThisBall.placement.y);
+                if (sqrt(pow(distancex,2)+pow(distancey,2))>pow(node.getRadius,2))
+                {
+                    node.GetGravityBodies(rBodies,ThisBall);
+                }
+                else
+                {
+                    GravBody tmpbody={getCenterOfMass().x,getCenterOfMass().y,getGravityRadius()};
+                    rBodies.push_back(tmpbody);
+                }   
+            }
+            node.GetGravityBodies(rBodies,ThisBall);
+        }
+    }
+    for (auto &object,objects)
+    {
+        GravBody tmpbody={object.placement.x,object.placement.y,object.radius};
+        
+    }
+}

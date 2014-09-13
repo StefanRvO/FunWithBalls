@@ -1,11 +1,5 @@
-#include<cstdlib>
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
-#include <cmath>
-#include<iostream>
 #include "Ball.h"
-#include "globals.h"
-#include "BallFunctions.h"
+
 
 Ball::Ball(float x,float y) {
     placement.x=x;
@@ -148,30 +142,31 @@ void Ball::CollisionDetect(Ball &Ball2,std::vector<Ball> &Balls)
 }
 
 
-int Ball::getId() {
+int Ball::getId() 
+{
     return id;
 }
 
-void Ball::CalcAttractions(std::vector<Ball> &Balls) {
-    for(auto &CurBall : Balls) {
-        if (CurBall.getId()==id) continue;
-        float distance=sqrt((placement.x-CurBall.placement.x)*(placement.x-CurBall.placement.x)+(placement.y-CurBall.placement.y)*(placement.y-CurBall.placement.y));
-        if (distance<0.0001) distance=0.0001;
-        float AttractionForce=GRAVITY*(CurBall.radius*CurBall.radius)*radius*radius/(pow(distance,1.1));
-        vektor AtractVek;
-        AtractVek.x=CurBall.placement.x-placement.x;
-        AtractVek.y=CurBall.placement.y-placement.y;
-        AtractVek=unitvektor(AtractVek);
-        vektor ForceVek;
-        ForceVek.x=AtractVek.x*AttractionForce;
-        ForceVek.y=AtractVek.y*AttractionForce;
-        direction.x+=ForceVek.x/(radius*radius);
-        direction.y+=ForceVek.y/(radius*radius);
-
-
-
-    }
-
+void Ball::CalcAttractions(QuadTree *qTree) 
+{
+        std::vector<GravBody> Bodies;
+        
+        qTree.GetGravityBodies(Bodies,this);
+        for (auto body & Bodies) 
+        {
+            float distance=sqrt((placement.x-body.x)*(placement.x-body.x)+(placement.y-body.y)*(placement.y-body.y));
+            if (distance<0.0001) distance=0.0001;
+            float AttractionForce=GRAVITY*(body.radius*body.radius)*radius*radius/(pow(distance,1.1));
+            vektor AtractVek;
+            AtractVek.x=body.placement.x-placement.x;
+            AtractVek.y=body.placement.y-placement.y;
+            AtractVek=unitvektor(AtractVek);
+            vektor ForceVek;
+            ForceVek.x=AtractVek.x*AttractionForce;
+            ForceVek.y=AtractVek.y*AttractionForce;
+            direction.x+=ForceVek.x/(radius*radius);
+            direction.y+=ForceVek.y/(radius*radius);
+        }
 
 }
 void Ball::CalculateSingleAttraction(vektor Atrpos,double atrmass)

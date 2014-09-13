@@ -1,3 +1,6 @@
+#ifndef DEFINES_H_EVENTSANDDRAWING
+#define DEFINES_H_EVENTSANDDRAWING
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
@@ -14,3 +17,5 @@ void DrawSettings(ALLEGRO_FONT *font);
 void HandleEvent(ALLEGRO_EVENT &ev,std::vector<Ball> &Balls);
 void HandleNoEventMouse(std::vector<Ball> &Balls);
 void VariousDraw(ALLEGRO_FONT *font,std::vector<Ball> &Balls,QuadTree &qtree);
+
+#endif

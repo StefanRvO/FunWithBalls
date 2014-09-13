@@ -98,7 +98,7 @@ int main(int argc, char **argv){
         HandleNoEventMouse(Balls);
         al_clear_to_color(al_map_rgb(0,0,0));
         if (Egravity) {
-            for(int i=0;i<Balls.size();i++) Balls[i].CalcAttractions(Balls);
+            for(int i=0;i<Balls.size();i++) Balls[i].CalcAttractions(qTree);
         }
         for(int i=0;i<Balls.size();i++) Balls[i].MakeStep();
         
@@ -116,6 +116,7 @@ int main(int argc, char **argv){
         IdFix(Balls);
         TreeRectangle QTRect={minX,minY,maxX-minX,maxY-minY};
         QuadTree qTree(0,QTRect);
+        qTree.clear();
         for(auto ThisBall : Balls) qTree.insert(ThisBall);
         
         if (ShowQuadTree) qTree.Draw();
