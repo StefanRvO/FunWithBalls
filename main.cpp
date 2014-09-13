@@ -137,7 +137,7 @@ int main(int argc, char **argv){
         if (Edecaylimit and Balls.size()) for(int i=0;i<Balls.size();i++) if(!Balls[i].DoCheckUnspawn()) Balls.erase(Balls.begin()+i);
         for(int i=0;i<Balls.size();i++) if(Balls[i].radius*zoomScale>0.1) Balls[i].Draw();
         
-        VariousDraw(font,Balls);
+        VariousDraw(font,Balls,qTree);
         if(ShowSettings) {
             DrawSettings(font);
         }

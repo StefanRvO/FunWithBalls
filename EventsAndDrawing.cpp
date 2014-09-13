@@ -252,13 +252,13 @@ void HandleNoEventMouse(std::vector<Ball> &Balls) {
 
     if(al_key_down(&key_state,ALLEGRO_KEY_C))
     {
-        auto CenterOfMass=GetCenterOfMass(Balls);
+        auto CenterOfMass=BallGetCenterOfMass(Balls);
         xOffSet=CenterOfMass.x-(SIZEX/zoomScale)/2.;
         yOffSet=CenterOfMass.y-(SIZEY/zoomScale)/2.;
     }
 }
 
-void VariousDraw(ALLEGRO_FONT *font,std::vector<Ball> &Balls) 
+void VariousDraw(ALLEGRO_FONT *font,std::vector<Ball> &Balls,QuadTree &qtree) 
 {       
         new_time= al_get_time();
         double delta_t=new_time-old_time;
@@ -269,5 +269,6 @@ void VariousDraw(ALLEGRO_FONT *font,std::vector<Ball> &Balls)
         al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, SIZEY*0.06,ALLEGRO_ALIGN_LEFT, "xOffSet %.1f",xOffSet);
         al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, SIZEY*0.09,ALLEGRO_ALIGN_LEFT, "yOffSet %.1f",yOffSet);
         al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, SIZEY*0.12,ALLEGRO_ALIGN_LEFT, "FPS %.0f",fps);
+        al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, SIZEY*0.15,ALLEGRO_ALIGN_LEFT, "mass %.0f",qtree.getGravityRadius());
 
 }

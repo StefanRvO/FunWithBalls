@@ -63,7 +63,7 @@ int MaxId(std::vector<Ball*> &Balls)
         }
     return max;
 }
-vektor GetCenterOfMass(std::vector<Ball> &Balls) 
+vektor BallGetCenterOfMass(std::vector<Ball> &Balls) 
     {
     float totalmass=0;
     vektor CoM={0,0};

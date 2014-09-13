@@ -122,3 +122,36 @@ void QuadTree::Draw()
 
 
 }
+vektor QuadTree::getCenterOfMass()
+{
+    if (CenterOfMass.y==-999999999)
+    {
+        vektor CoM={0,0};
+        if(nodes.size())
+        {
+            for(auto &node : nodes)  CoM.x+=node.getCenterOfMass().x*node.getGravityRadius()*node.getGravityRadius();
+            for(auto &node : nodes)  CoM.y+=node.getCenterOfMass().y*node.getGravityRadius()*node.getGravityRadius();
+        }
+        CoM.x+=BallGetCenterOfMass(objects).x;
+        CoM.y+=BallGetCenterOfMass(objects).y;
+        CenterOfMass.x=CoM.x/(getGravityRadius()*getGravityRadius());
+        CenterOfMass.y=CoM.y/(getGravityRadius()*getGravityRadius());
+        
+    }
+    return CenterOfMass;    
+}
+float QuadTree::getGravityRadius()
+{
+    if (gravityRadius==-1)
+    {
+        float totalmass=0;
+        if(nodes.size())
+        {
+            for(auto &node :nodes) totalmass+=node.getGravityRadius()*node.getGravityRadius();
+        }
+       for (auto &object:objects) totalmass+=object.radius*object.radius;
+       gravityRadius=sqrt(totalmass);
+       
+    }
+    return gravityRadius;
+}
