@@ -1,4 +1,12 @@
 #include "BallFunctions.h"
+
+void IdFix(std::vector<Ball> &Balls) //Sort the Id's and reassign them to start at 0 and increment 1 per ball
+{
+    for(int i=0;i<Balls.size(); i++) Balls[i].setId(i);
+    return;
+
+}
+
 void SpawnBall(std::vector<Ball> &Balls)
 {   int count=0;
     for (int i=0;i<1;i++) 
@@ -40,9 +48,18 @@ void SpawnBall(std::vector<Ball> &Balls,float x,float y,float radius,float dirx,
 int MaxId(std::vector<Ball> &Balls) 
 {
     int max=0;
-    for (Ball &CurBall : Balls) 
+    for (auto &CurBall : Balls) 
         {
             if (CurBall.getId()>max) max=CurBall.getId();
+        }
+    return max;
+}
+int MaxId(std::vector<Ball*> &Balls) 
+{
+    int max=0;
+    for (auto &CurBall : Balls) 
+        {
+            if (CurBall->getId()>max) max=CurBall->getId();
         }
     return max;
 }

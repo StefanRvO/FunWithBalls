@@ -25,6 +25,7 @@ extern float MouseSpawnSize;
 extern float zoomScale; 
 extern float xOffSet;
 extern float yOffSet;
-
+extern double old_time;
+extern double new_time;
 
 #endif // DEFINES_H_INCLUDED

@@ -11,4 +11,5 @@
 #define SETTINGSSIZEY 0.40f
 void DrawSettings(ALLEGRO_FONT *font);
 void HandleEvent(ALLEGRO_EVENT &ev,std::vector<Ball> &Balls);
-void HandleNoEventMouse(std::vector<Ball> &Balls); 
+void HandleNoEventMouse(std::vector<Ball> &Balls);
+void VariousDraw(ALLEGRO_FONT *font,std::vector<Ball> &Balls);

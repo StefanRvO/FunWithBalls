@@ -24,7 +24,7 @@ public:
     void MakeStep();
     void setId(int);
     int getId();
-    void CollisionDetect(std::vector<Ball>&);
+    void CollisionDetect(Ball &Ball2,std::vector<Ball> &Balls);
     vektor placement;
     vektor direction;
     float radius;

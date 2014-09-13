@@ -2,8 +2,6 @@
 
 QuadTree::QuadTree(int pLevel, TreeRectangle pBounds)
 {
-    if (pBounds.height>pBounds.width) MAXRADIUS=pBounds.width/5.;
-    else MAXRADIUS=pBounds.height/5.;
     level=pLevel;
     bounds=pBounds;
     nodes.clear();
@@ -87,7 +85,7 @@ void QuadTree::insert(Ball ThisBall)
     }
     objects.push_back(ThisBall);
     
-    if (objects.size() > MAX_OBJECTS && level < MAX_LEVELS && ThisBall.radius<MAXRADIUS)
+    if (objects.size() > MAX_OBJECTS && level < MAX_LEVELS)
     {
         if (!(nodes.size()))  split();
         for (int i=0;i<objects.size();)

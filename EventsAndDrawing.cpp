@@ -252,3 +252,17 @@ void HandleNoEventMouse(std::vector<Ball> &Balls) {
         yOffSet=CenterOfMass.y-(SIZEY/zoomScale)/2.;
     }
 }
+
+void VariousDraw(ALLEGRO_FONT *font,std::vector<Ball> &Balls) 
+{       
+        new_time= al_get_time();
+        double delta_t=new_time-old_time;
+        double fps=1./(delta_t);
+        old_time=new_time;
+        al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, 0,ALLEGRO_ALIGN_LEFT, "Balls: %zu",Balls.size());
+        al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, SIZEY*0.03,ALLEGRO_ALIGN_LEFT, "zoomScale: %.4f",zoomScale);
+        al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, SIZEY*0.06,ALLEGRO_ALIGN_LEFT, "xOffSet %.1f",xOffSet);
+        al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, SIZEY*0.09,ALLEGRO_ALIGN_LEFT, "yOffSet %.1f",yOffSet);
+        al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, SIZEY*0.12,ALLEGRO_ALIGN_LEFT, "FPS %.0f",fps);
+
+}

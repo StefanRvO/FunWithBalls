@@ -21,3 +21,5 @@ bool MouseSpawnCont=false;
 float zoomScale=1;
 float xOffSet=0;
 float yOffSet=0;
+double old_time;
+double new_time;

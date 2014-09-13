@@ -103,54 +103,46 @@ void Ball::setId(int identi)
 {
     id=identi;
 }
-void Ball::CollisionDetect(std::vector<Ball> &Balls )
+void Ball::CollisionDetect(Ball &Ball2,std::vector<Ball> &Balls)
 {
-    for(auto &CurBall : Balls) {
-        if (CurBall.getId()==id) continue;
-        //Test for proximity before real test
-        if (!(placement.x + radius + CurBall.radius >= CurBall.placement.x
-        && placement.x <= CurBall.placement.x + radius + CurBall.radius
-        && placement.y + radius + CurBall.radius >= CurBall.placement.y
-        && placement.y <= CurBall.placement.y + radius + CurBall.radius)) continue;
-
-        //Real test
-        if (sqrt((placement.x-CurBall.placement.x)*(placement.x-CurBall.placement.x)+(placement.y-CurBall.placement.y)*(placement.y-CurBall.placement.y))<=(radius+CurBall.radius)) {
-            //std::cout << "collision" << std::endl;
-
-            if (!CollisionMerge)
-            {
-                //Calculate new directions
-                float x=(direction.x*(radius-CurBall.radius)+(2*CurBall.radius*CurBall.direction.x))/(radius+CurBall.radius);
-                float y=(direction.y*(radius-CurBall.radius)+(2*CurBall.radius*CurBall.direction.y))/(radius+CurBall.radius);
-                float x2=(CurBall.direction.x*(CurBall.radius-radius)+(2*radius*direction.x))/(radius+CurBall.radius);
-                float y2=(CurBall.direction.y*(CurBall.radius-radius)+(2*radius*direction.y))/(radius+CurBall.radius);
-                CurBall.setDirection(x2,y2);
-                setDirection(x,y);
-                CurBall.MakeStep();
-                MakeStep();
-            }
-            else
-            {
-                //Calculate collision point
-                vektor collision;
-                collision.x=(placement.x*radius+CurBall.placement.x*CurBall.radius)/(CurBall.radius+radius);
-                collision.y=(placement.y*radius+CurBall.placement.y*CurBall.radius)/(CurBall.radius+radius);
-
-                color[0]=(color[0]*radius*radius+CurBall.radius*CurBall.radius*CurBall.color[0])/(radius*radius+CurBall.radius*CurBall.radius)+.1;
-                color[1]=(color[1]*radius*radius+CurBall.radius*CurBall.radius*CurBall.color[1])/(radius*radius+CurBall.radius*CurBall.radius)+.1;
-                color[2]=(color[2]*radius*radius+CurBall.radius*CurBall.radius*CurBall.color[2])/(radius*radius+CurBall.radius*CurBall.radius)+.1;
-                float newradius=sqrt(radius*radius+CurBall.radius*CurBall.radius);
-
-                //Make New Ball
-                direction.x=(direction.x*radius+CurBall.direction.x*CurBall.radius)/(radius+CurBall.radius);
-                direction.y=(direction.y*radius+CurBall.direction.y*CurBall.radius)/(radius+CurBall.radius);
-                radius=newradius;
-                placement=collision;
-                //std::cout << abs(&Balls[0]-&CurBall) << std::endl;
-                Balls.erase(Balls.begin()+abs(&Balls[0]-&CurBall));
-                setId(MaxId(Balls)+1);
-
-            }
+    if (!(placement.x + radius + Ball2.radius >= Ball2.placement.x
+    && placement.x <= Ball2.placement.x + radius + Ball2.radius
+    && placement.y + radius + Ball2.radius >= Ball2.placement.y
+    && placement.y <= Ball2.placement.y + radius + Ball2.radius)) return;
+    //Real test
+    if (sqrt((placement.x-Ball2.placement.x)*(placement.x-Ball2.placement.x)+(placement.y-Ball2.placement.y)*(placement.y-Ball2.placement.y))<=(radius+Ball2.radius)) {
+        //std::cout << "collision" << std::endl;
+        if (!CollisionMerge)
+        {
+            //Calculate new directions
+            float x=(direction.x*(radius-Ball2.radius)+(2*Ball2.radius*Ball2.direction.x))/(radius+Ball2.radius);
+            float y=(direction.y*(radius-Ball2.radius)+(2*Ball2.radius*Ball2.direction.y))/(radius+Ball2.radius);
+            float x2=(Ball2.direction.x*(Ball2.radius-radius)+(2*radius*direction.x))/(radius+Ball2.radius);
+            float y2=(Ball2.direction.y*(Ball2.radius-radius)+(2*radius*direction.y))/(radius+Ball2.radius);
+            Ball2.setDirection(x2,y2);
+            setDirection(x,y);
+            Ball2.MakeStep();
+            MakeStep();
+        }
+        else
+        {
+            //Calculate collision point
+            vektor collision;
+            collision.x=(placement.x*radius+Ball2.placement.x*Ball2.radius)/(Ball2.radius+radius);
+            collision.y=(placement.y*radius+Ball2.placement.y*Ball2.radius)/(Ball2.radius+radius);
+            color[0]=(color[0]*radius*radius+Ball2.radius*Ball2.radius*Ball2.color[0])/(radius*radius+Ball2.radius*Ball2.radius)+.1;
+            color[1]=(color[1]*radius*radius+Ball2.radius*Ball2.radius*Ball2.color[1])/(radius*radius+Ball2.radius*Ball2.radius)+.1;
+            color[2]=(color[2]*radius*radius+Ball2.radius*Ball2.radius*Ball2.color[2])/(radius*radius+Ball2.radius*Ball2.radius)+.1;
+            float newradius=sqrt(radius*radius+Ball2.radius*Ball2.radius);
+            //Make New Ball
+            direction.x=(direction.x*radius+Ball2.direction.x*Ball2.radius)/(radius+Ball2.radius);
+            direction.y=(direction.y*radius+Ball2.direction.y*Ball2.radius)/(radius+Ball2.radius);
+            radius=newradius;
+            placement=collision;
+            //std::cout << abs(&Balls[0]-&Ball2) << std::endl;
+            Balls.erase(Balls.begin()+abs(&Balls[0]-&Ball2));
+            setId(MaxId(Balls)+1);
+            IdFix(Balls);
         }
     }
 }
