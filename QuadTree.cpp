@@ -2,6 +2,8 @@
 
 QuadTree::QuadTree(int pLevel, TreeRectangle pBounds)
 {
+    if (pBounds.height>pBounds.width) MAXRADIUS=pBounds.width/5.;
+    else MAXRADIUS=pBounds.height/5.;
     level=pLevel;
     bounds=pBounds;
     nodes.clear();
@@ -85,7 +87,7 @@ void QuadTree::insert(Ball ThisBall)
     }
     objects.push_back(ThisBall);
     
-    if (objects.size() > MAX_OBJECTS && level < MAX_LEVELS)
+    if (objects.size() > MAX_OBJECTS && level < MAX_LEVELS && ThisBall.radius<MAXRADIUS)
     {
         if (!(nodes.size()))  split();
         for (int i=0;i<objects.size();)
@@ -103,8 +105,15 @@ void QuadTree::insert(Ball ThisBall)
 void QuadTree::retrieve(std::vector<Ball> &returnBalls,Ball &ThisBall)
 {
     int index=getIndex(ThisBall);
-    if(index != -1 and nodes.size()) nodes[index].retrieve(returnBalls,ThisBall);
+    if(index != -1 and nodes.size()) 
+    {
+        nodes[index].retrieve(returnBalls,ThisBall);
+        return;
+    }
     for (int i=0;i<objects.size();i++) returnBalls.push_back(objects[i]);
+    for(int i=0;i<nodes.size();i++) nodes[i].retrieve(returnBalls,ThisBall);
+    return;
+         
 }
 void QuadTree::Draw()
 {

@@ -100,8 +100,8 @@ int main(int argc, char **argv){
         if (Egravity) {
             for(int i=0;i<Balls.size();i++) Balls[i].CalcAttractions(Balls);
         }
-        for(int i=0;i<1;i++) {
-            for(int i=0;i<Balls.size();i++) Balls[i].MakeStep();
+        for(int i=0;i<Balls.size();i++) Balls[i].MakeStep();
+        
         float maxX=-99999999999999;
         float minX=999999999999999;
         float minY=999999999999999;
@@ -117,13 +117,12 @@ int main(int argc, char **argv){
         QuadTree qTree(0,QTRect);
         for(auto ThisBall : Balls) qTree.insert(ThisBall);
         qTree.Draw();
-            if (Collision) {
-                for(int i=0;i<Balls.size();i++)
-                {
-                    std::vector<Ball> rtBalls;
-                    qTree.retrieve(rtBalls,Balls[i]);
-                    Balls[i].CollisionDetect(rtBalls);
-                }
+        if (Collision) {
+            for(int i=0;i<Balls.size();i++)
+            {
+                std::vector<Ball> rtBalls;
+                qTree.retrieve(rtBalls,Balls[i]);
+                Balls[i].CollisionDetect(rtBalls);
             }
         }
         if (Edecay) for(int i=0;i<Balls.size();i++) Balls[i].DoDecay();

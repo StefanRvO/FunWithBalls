@@ -16,7 +16,8 @@ class QuadTree
 {
     private:
         int MAX_OBJECTS=20;
-        int MAX_LEVELS=50;
+        int MAX_LEVELS=15;
+        int MAXRADIUS;
         int level;
         std::vector<Ball> objects;
         std::vector<QuadTree> nodes;
