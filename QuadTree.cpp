@@ -117,7 +117,7 @@ void QuadTree::Draw()
 {
     
     for(int i=0;i<nodes.size() ;i++) nodes[i].Draw();
-    al_draw_rectangle(bounds.x*zoomScale-xOffSet*zoomScale,bounds.y*zoomScale-yOffSet*zoomScale,(bounds.x+bounds.width)*zoomScale-xOffSet*zoomScale,(bounds.y+bounds.height)*zoomScale-yOffSet*zoomScale,al_map_rgb(0,0,255),(3l)*zoomScale);
+    al_draw_rectangle(bounds.x*zoomScale-xOffSet*zoomScale,bounds.y*zoomScale-yOffSet*zoomScale,(bounds.x+bounds.width)*zoomScale-xOffSet*zoomScale,(bounds.y+bounds.height)*zoomScale-yOffSet*zoomScale,al_map_rgb(0,0,255),(5-level/2.));
     //std::cout << objects.size() << "\n";
 
 

@@ -27,5 +27,6 @@ extern float xOffSet;
 extern float yOffSet;
 extern double old_time;
 extern double new_time;
+extern bool ShowQuadTree;
 
 #endif // DEFINES_H_INCLUDED

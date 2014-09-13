@@ -15,7 +15,7 @@ typedef struct {
 class QuadTree
 {
     private:
-        int MAX_OBJECTS=20;
+        int MAX_OBJECTS=5;
         int MAX_LEVELS=15;
         int level;
         std::vector<Ball> objects;

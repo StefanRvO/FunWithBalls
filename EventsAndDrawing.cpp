@@ -84,7 +84,11 @@ void DrawSettings(ALLEGRO_FONT *font) { //Yeah it looks like shit.. Blame Allegr
     al_draw_line(SIZEX*0.19,SIZEY*0.36,SIZEX*0.09,SIZEY*0.36,al_map_rgb(0,0,255),2);
     float MouseattractionContX=(Mouseattraction+50)/100.*0.10+0.09; //Incomplete/correct
     al_draw_filled_circle(SIZEX*MouseattractionContX,SIZEY*0.36,SIZEX*0.005,al_map_rgb(0,0,255));
-
+    //QuadTree
+    al_draw_line(SIZEX*SETTINGSSIZEX,SIZEY*0.375,0,SIZEY*0.375,al_map_rgb(0,0,255),2);
+    al_draw_textf(font, al_map_rgb(0,0,255), 0, SIZEY*0.375,ALLEGRO_ALIGN_LEFT, "Show QuadTree: ");
+    if (ShowQuadTree) al_draw_filled_rectangle(SIZEX*0.09,SIZEY*0.382,SIZEX*0.10,SIZEY*0.395,al_map_rgb(0,0,255));
+    else al_draw_rectangle(SIZEX*0.09,SIZEY*0.382,SIZEX*0.10,SIZEY*0.395,al_map_rgb(0,0,255),1);
 }
 
 
@@ -111,6 +115,7 @@ void HandleEvent(ALLEGRO_EVENT &event, std::vector<Ball> &Balls) {
             else if (event.mouse.x>SIZEX*0.08  and event.mouse.x<SIZEX*0.09 and event.mouse.y>SIZEY*0.292 and event.mouse.y<SIZEY*0.305) {MouseSpawnCont=!MouseSpawnCont; if (MouseSpawnCont) MouseSpawn=true;}
             else if (event.mouse.x>SIZEX*0.0  and event.mouse.x<SIZEX*0.075 and event.mouse.y>SIZEY*0.292 and event.mouse.y<SIZEY*0.305) MouseSpawn=!MouseSpawn;
             else if (event.mouse.x>SIZEX*0.0  and event.mouse.x<SIZEX*0.09 and event.mouse.y>SIZEY*0.35 and event.mouse.y<SIZEY*0.37) EMouseattraction=!EMouseattraction;
+            else if (event.mouse.x>SIZEX*0.09  and event.mouse.x<SIZEX*0.10 and event.mouse.y>SIZEY*0.382 and event.mouse.y<SIZEY*0.395) ShowQuadTree=!ShowQuadTree;
         }
         
         if (MouseSpawn and !MouseSpawnCont and (!(event.mouse.x<SIZEX*SETTINGSSIZEX and event.mouse.y<SIZEY*SETTINGSSIZEY) or !ShowSettings)) 

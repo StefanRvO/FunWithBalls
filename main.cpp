@@ -118,7 +118,7 @@ int main(int argc, char **argv){
         QuadTree qTree(0,QTRect);
         for(auto ThisBall : Balls) qTree.insert(ThisBall);
         
-        qTree.Draw();
+        if (ShowQuadTree) qTree.Draw();
         if (Collision) {
             for(int i=0;i<Balls.size();i++)
             {

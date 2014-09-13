@@ -8,7 +8,7 @@
 #include "Ball.h"
 #include "BallFunctions.h"
 #define SETTINGSSIZEX 0.2f
-#define SETTINGSSIZEY 0.40f
+#define SETTINGSSIZEY 0.45f
 void DrawSettings(ALLEGRO_FONT *font);
 void HandleEvent(ALLEGRO_EVENT &ev,std::vector<Ball> &Balls);
 void HandleNoEventMouse(std::vector<Ball> &Balls);

@@ -18,6 +18,7 @@ float Mouseattraction=0.;
 bool MouseSpawn=false;
 float MouseSpawnSize=2.;
 bool MouseSpawnCont=false;
+bool ShowQuadTree=false;
 float zoomScale=1;
 float xOffSet=0;
 float yOffSet=0;
