@@ -24,3 +24,5 @@ float xOffSet=0;
 float yOffSet=0;
 double old_time;
 double new_time;
+bool PresCol=false;
+bool PresGrav=false;

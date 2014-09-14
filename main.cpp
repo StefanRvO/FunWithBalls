@@ -11,9 +11,6 @@
 #include "Ball.h"
 #include "globals.h"
 #include "EventsAndDrawing.h"
-#include "BallFunctions.h"
-#include "QuadTree.h"
-
 
 int main(int argc, char **argv){
 
@@ -74,11 +71,12 @@ int main(int argc, char **argv){
 
 
     //Main loop
+    TreeRectangle QTRect={0,0,0,0};
+    QuadTree qTree(0,QTRect);
     ALLEGRO_FONT *font =al_load_ttf_font("FreeSans.ttf",SIZEX/90,0);
     float spawnprogress=0;
     while(true)
     {
-        //Balls.reserve(Balls.size()+10);
         /*for(int i=0;i<Balls.size();i++) std::cout << Balls[i].placement.x << "\n";
         std::cout << "\n"; */
         //std::cout << Balls.size() << std::endl;
@@ -97,11 +95,8 @@ int main(int argc, char **argv){
         }
         HandleNoEventMouse(Balls);
         al_clear_to_color(al_map_rgb(0,0,0));
-        if (Egravity) {
-            for(int i=0;i<Balls.size();i++) Balls[i].CalcAttractions(qTree);
-        }
+
         for(int i=0;i<Balls.size();i++) Balls[i].MakeStep();
-        
         float maxX=-99999999999999;
         float minX=999999999999999;
         float minY=999999999999999;
@@ -120,19 +115,44 @@ int main(int argc, char **argv){
         for(auto ThisBall : Balls) qTree.insert(ThisBall);
         
         if (ShowQuadTree) qTree.Draw();
-        if (Collision) {
-            for(int i=0;i<Balls.size();i++)
+        if (Collision and !PresCol) {
+            bool checkdone=false;
+            while(!checkdone)
             {
-                std::vector<Ball> rtBalls;
-                rtBalls.clear();
-                rtBalls.reserve(10);
-                qTree.retrieve(rtBalls,Balls[i]);
-                for(int k=0;k<rtBalls.size();k++)
+                checkdone=true;
+                IdFix(Balls);
+                for(int i=0;i<Balls.size();i++)
                 {
-                    if (Balls[i].getId()==rtBalls[k].getId()) continue;
-                    Balls[i].CollisionDetect(Balls[rtBalls[k].getId()],Balls);
+                    if (Balls[i].HasCheckedCol()) continue;
+                    std::vector<Ball> rtBalls;
+                    rtBalls.clear();
+                    rtBalls.reserve(10);
+                    qTree.retrieve(rtBalls,Balls[i]);
+                    for(int k=0;k<rtBalls.size();k++)
+                    {
+                        if (Balls[i].getId()==rtBalls[k].getId()) continue;
+                        int rtBall=Balls[i].CollisionDetect(Balls[rtBalls[k].getId()]);
+                        if (rtBall!=-1) 
+                        {
+                            Balls.erase(Balls.begin()+rtBalls[k].getId());
+                            checkdone=false;
+                            break;
+                        }
+                    }
+                    if (!checkdone) break;
                 }
             }
+        }
+        else if (Collision and PresCol)
+        {
+            for(int i=0;i<Balls.size();i++) Balls[i].CollisionDetect(Balls);
+        
+        }
+        if (Egravity and !PresGrav) {
+            for(int i=0;i<Balls.size();i++) Balls[i].CalcAttractions(qTree);
+        }
+        else if (Egravity and PresGrav) {
+            for(int i=0;i<Balls.size();i++) Balls[i].CalcAttractions(Balls);
         }
         if (Edecay) for(int i=0;i<Balls.size();i++) Balls[i].DoDecay();
         if (Edecaylimit and Balls.size()) for(int i=0;i<Balls.size();i++) if(!Balls[i].DoCheckUnspawn()) Balls.erase(Balls.begin()+i);

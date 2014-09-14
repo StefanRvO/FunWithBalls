@@ -1,6 +1,3 @@
-#ifndef DEFINES_H_GLOBALS
-#define DEFINES_H_GLOBALS
-
 #define SIZEX 1300
 #define SIZEY 700
 extern float GRAVITY;
@@ -28,5 +25,5 @@ extern float yOffSet;
 extern double old_time;
 extern double new_time;
 extern bool ShowQuadTree;
-
-#endif // DEFINES_H_GLOBALS
+extern bool PresCol;
+extern bool PresGrav;
