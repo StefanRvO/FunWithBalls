@@ -25,7 +25,7 @@ int main(int argc, char **argv){
         return -1;
     }
     al_install_keyboard();
-
+    al_set_new_display_flags(ALLEGRO_RESIZABLE);
     display = al_create_display(SIZEX, SIZEY);
     if(!display)
     {
@@ -73,10 +73,10 @@ int main(int argc, char **argv){
     //Main loop
     TreeRectangle QTRect={0,0,0,0};
     QuadTree qTree(0,QTRect);
-    ALLEGRO_FONT *font =al_load_ttf_font("FreeSans.ttf",SIZEX/90,0);
     float spawnprogress=0;
     while(true)
     {
+        ALLEGRO_FONT *font =al_load_ttf_font("FreeSans.ttf",SIZEX/90,0);
         /*for(int i=0;i<Balls.size();i++) std::cout << Balls[i].placement.x << "\n";
         std::cout << "\n"; */
         //std::cout << Balls.size() << std::endl;
@@ -91,7 +91,7 @@ int main(int argc, char **argv){
         }
         while (!al_is_event_queue_empty(event_queue)) {
             al_get_next_event(event_queue,&ev);
-            HandleEvent(ev,Balls);
+            HandleEvent(ev,Balls,display);
         }
         HandleNoEventMouse(Balls);
         al_clear_to_color(al_map_rgb(0,0,0));
@@ -163,6 +163,7 @@ int main(int argc, char **argv){
             DrawSettings(font);
         }
         al_flip_display();
+        al_destroy_font(font);
     }
     al_destroy_display(display);
 

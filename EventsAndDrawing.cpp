@@ -102,9 +102,15 @@ void DrawSettings(ALLEGRO_FONT *font) { //Yeah it looks like shit.. Blame Allegr
 }
 
 
-void HandleEvent(ALLEGRO_EVENT &event, std::vector<Ball> &Balls) {
+void HandleEvent(ALLEGRO_EVENT &event, std::vector<Ball> &Balls, ALLEGRO_DISPLAY *display) {
 
     if (event.type==ALLEGRO_EVENT_DISPLAY_CLOSE) std::exit(0);
+    else if(event.type==ALLEGRO_EVENT_DISPLAY_RESIZE)
+    {
+        al_acknowledge_resize(display);
+        SIZEX=al_get_display_width(display);
+        SIZEY=al_get_display_height(display);
+    }
     else if (event.type==ALLEGRO_EVENT_KEY_DOWN) { //Keyboard event
         if (event.keyboard.keycode==ALLEGRO_KEY_S) ShowSettings=!ShowSettings;
         return;

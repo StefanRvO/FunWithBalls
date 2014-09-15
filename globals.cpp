@@ -1,4 +1,6 @@
 #include "globals.h"
+int SIZEX=1300;
+int SIZEY=600;
 float GRAVITY=0.0;
 bool BoxBounce=true;
 bool Collision=true;

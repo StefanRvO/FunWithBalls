@@ -1,5 +1,5 @@
-#define SIZEX 1300
-#define SIZEY 700
+extern int SIZEX;
+extern int SIZEY;
 extern float GRAVITY;
 extern bool Egravity;
 extern bool BoxBounce;
