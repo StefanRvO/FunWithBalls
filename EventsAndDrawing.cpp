@@ -244,8 +244,8 @@ void HandleNoEventMouse(std::vector<Ball> &Balls) {
     { 
         float newZoomScale=zoomScale-zoomScale*0.02;
         float zoom_ratio=(newZoomScale)/zoomScale;
-        xOffSet-=(SIZEX/zoomScale)*(1-zoom_ratio)/2.;
-        yOffSet-=(SIZEY/zoomScale)*(1-zoom_ratio)/2.;
+        xOffSet-=(SIZEX/(zoomScale*zoom_ratio))*(1-zoom_ratio)/2.;
+        yOffSet-=(SIZEY/(zoomScale*zoom_ratio))*(1-zoom_ratio)/2.;
         zoomScale=newZoomScale;
     
     }
@@ -253,8 +253,8 @@ void HandleNoEventMouse(std::vector<Ball> &Balls) {
     {
         float newZoomScale=zoomScale+zoomScale*0.02;
         float zoom_ratio=(newZoomScale)/zoomScale;
-        xOffSet-=(SIZEX/zoomScale)*(1-zoom_ratio)/2.;
-        yOffSet-=(SIZEY/zoomScale)*(1-zoom_ratio)/2.;
+        xOffSet-=(SIZEX/(zoomScale*zoom_ratio))*(1-zoom_ratio)/2.;
+        yOffSet-=(SIZEY/(zoomScale*zoom_ratio))*(1-zoom_ratio)/2.;
         zoomScale=newZoomScale; 
     }
     if(al_key_down(&key_state,ALLEGRO_KEY_DOWN)) yOffSet+=10/zoomScale;
@@ -282,5 +282,7 @@ void VariousDraw(ALLEGRO_FONT *font,std::vector<Ball> &Balls,QuadTree &qtree)
         al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, SIZEY*0.09,ALLEGRO_ALIGN_LEFT, "yOffSet %.1f",yOffSet);
         al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, SIZEY*0.12,ALLEGRO_ALIGN_LEFT, "FPS %.0f",fps);
         al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, SIZEY*0.15,ALLEGRO_ALIGN_LEFT, "mass %.0f",qtree.getGravityRadius());
+        al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, SIZEY*0.18,ALLEGRO_ALIGN_LEFT, "Centerx: %.0f",xOffSet+SIZEX/zoomScale/2.);
+        al_draw_textf(font, al_map_rgb(0,0,255), SIZEX*0.91, SIZEY*0.21,ALLEGRO_ALIGN_LEFT, "Centery: %.0f",yOffSet+SIZEY/zoomScale/2.);
 
 }
